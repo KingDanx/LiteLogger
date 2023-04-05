@@ -5,7 +5,7 @@ For use in Nodejs to create daily logs with time stamps for your application.<br
 # To use:
 
 ## Install the NPM package:
-`npm i litelogger`
+`npm i @kingdanx/litelogger`
 
 ## Create a new LiteLogger object:
 ```javascript
