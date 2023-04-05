@@ -1,15 +1,15 @@
-# LoggerLite
+# LiteLogger
 # Usage
 For use in Nodejs to create daily logs with time stamps for your application.<br>
 
 # To use:
 
 ## Install the NPM package:
-`npm i loggerlite`
+`npm i litelogger`
 
-## Create a new LoggerLite object:
+## Create a new LiteLogger object:
 ```javascript
-const logger = new LoggerLight("Test Dir", "Test Logs");
+const logger = new LiteLogger("Test Dir", "Test Logs");
 //The first argument is the name of the directory. It will be created if it does not exist
 //The second argument is the name attached to the .log files
 ```
