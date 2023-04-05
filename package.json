@@ -1,5 +1,5 @@
 {
-  "name": "litelogger",
+  "name": "@kingdanx/litelogger",
   "version": "1.0.0",
   "description": "For use in Nodejs applications to create log files for your application.",
   "main": "LiteLogger.js",
@@ -8,13 +8,13 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/KingDanx/LoggerLite.git"
+    "url": "git+https://github.com/KingDanx/LiteLogger.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/KingDanx/LoggerLite/issues"
+    "url": "https://github.com/KingDanx/LiteLogger/issues"
   },
-  "homepage": "https://github.com/KingDanx/LoggerLite#readme"
+  "homepage": "https://github.com/KingDanx/LiteLogger#readme"
 }
