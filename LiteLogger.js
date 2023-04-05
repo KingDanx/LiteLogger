@@ -1,7 +1,7 @@
 const fs = require("fs");
 const path = require("path");
 
-class LoggerLight {
+class LiteLogger {
   constructor(folderName, logName = "Log") {
     this.folderName = folderName;
     this.logName = logName;
@@ -67,4 +67,4 @@ class LoggerLight {
   }
 }
 
-module.exports = LoggerLight;
+module.exports = LiteLogger;
