@@ -9,9 +9,10 @@ For use in Nodejs to create daily logs with time stamps for your application.<br
 
 ## Create a new LiteLogger object:
 ```javascript
-const logger = new LiteLogger("Test Dir", "Test Logs");
-//The first argument is the name of the directory. It will be created if it does not exist
-//The second argument is the name attached to the .log files
+const logger = new LiteLogger(__dirname, "Test Dir", "Test Logs");
+//The first argument is the name of the directory. 
+//The second argument is the name of the folder you want your files in. It will be created if it does not exist
+//The third argument is the name attached to the .log files
 ```
 
 This logger object would create a directory and files that look like this:<br>
