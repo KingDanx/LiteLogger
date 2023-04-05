@@ -2,12 +2,15 @@ const fs = require("fs");
 const path = require("path");
 
 class LiteLogger {
-  constructor(folderName, logName = "Log") {
+  constructor(directory, folderName, logName = "Log") {
+    this.directory = directory;
     this.folderName = folderName;
     this.logName = logName;
+    this.path = `${directory}/${folderName}`;
   }
 
   log(message, messageType = "INFO") {
+    console.log(this.directory);
     const date = new Date();
     const fileName = `${this.logName} - ${
       date.getMonth() + 1
@@ -21,7 +24,7 @@ class LiteLogger {
     );
 
     //If directory does not exist create it.
-    if (!fs.existsSync(path.join(__dirname, this.folderName))) {
+    if (!fs.existsSync(this.path)) {
       fs.mkdir(this.folderName, (e) => {
         if (e) console.error(e);
         else
@@ -32,8 +35,8 @@ class LiteLogger {
     }
 
     // If file does not exist, create it.
-    if (!fs.existsSync(path.join(__dirname, this.folderName, fileName))) {
-      fs.writeFileSync(path.join(__dirname, this.folderName, fileName), "");
+    if (!fs.existsSync(path.join(this.path, fileName))) {
+      fs.writeFileSync(path.join(this.path, fileName), "");
     }
 
     if (typeof message != "string" && typeof message != "number") {
