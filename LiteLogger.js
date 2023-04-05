@@ -16,13 +16,12 @@ class LiteLogger {
       date.getMonth() + 1
     }_${date.getDate()}_${date.getFullYear()}.log`;
     //Creates file stream, flag: "a" is for append
-    const logStream = fs.createWriteStream(path.join(this.path, fileName), {
-      flags: "a",
-    });
 
     //If directory does not exist create it.
-    if (!fs.existsSync(path.join(this.path, fileName))) {
-      fs.mkdir(path.join(this.path, fileName), (e) => {
+    if (!fs.existsSync(path.join(this.path))) {
+      console.log("in");
+      console.log(path.join(this.path));
+      fs.mkdir(path.join(this.path), (e) => {
         if (e) console.error(e);
         else
           console.info(
@@ -35,6 +34,10 @@ class LiteLogger {
     if (!fs.existsSync(path.join(this.path, fileName))) {
       fs.writeFileSync(path.join(this.path, fileName), "");
     }
+
+    const logStream = fs.createWriteStream(path.join(this.path, fileName), {
+      flags: "a",
+    });
 
     if (typeof message != "string" && typeof message != "number") {
       logStream.write(
