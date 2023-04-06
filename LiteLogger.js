@@ -17,8 +17,6 @@ class LiteLogger {
 
     //If directory does not exist create it.
     if (!fs.existsSync(path.join(this.path))) {
-      console.log("in");
-      console.log(path.join(this.path));
       fs.mkdir(path.join(this.path), (e) => {
         if (e) console.error(e);
         else
