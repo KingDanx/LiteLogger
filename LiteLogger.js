@@ -14,29 +14,30 @@ class LiteLogger {
     const fileName = `${this.logName} - ${
       date.getMonth() + 1
     }_${date.getDate()}_${date.getFullYear()}.log`;
-    //Creates file stream, flag: "a" is for append
-
+    
     //If directory does not exist create it.
     if (!fs.existsSync(path.join(this.path))) {
       fs.mkdir(path.join(this.path), (e) => {
         if (e) console.error(e);
         else
-          console.info(
-            `Log directory ${this.folderName} successfully created!`
+        console.info(
+          `Log directory ${this.folderName} successfully created!`
           );
-      });
-    }
-
-    // If file does not exist, create it.
-    if (!fs.existsSync(path.join(this.path, fileName))) {
-      fs.writeFileSync(path.join(this.path, fileName), "");
-    }
-
+        });
+      }
+      
+      // If file does not exist, create it.
+      if (!fs.existsSync(path.join(this.path, fileName))) {
+        fs.writeFileSync(path.join(this.path, fileName), "");
+      }
+      
+    //Creates file stream, flag: "a" is for append
     const logStream = fs.createWriteStream(path.join(this.path, fileName), {
       flags: "a",
     });
 
     if (typeof message != "string" && typeof message != "number") {
+      //What is being written to the file ie: [WARNING] Date - Time - Message
       logStream.write(
         `[${messageType}] ${
           date.getMonth() + 1
@@ -49,7 +50,6 @@ class LiteLogger {
         } - ${JSON.stringify(message)}\n`
       );
     } else {
-      //What is being written to the file ie: [WARNING] Date - Time - Message
       logStream.write(
         `[${messageType}] ${
           date.getMonth() + 1
