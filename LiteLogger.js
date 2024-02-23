@@ -12,8 +12,8 @@ class LiteLogger {
   log(message, messageType = "INFO") {
     const date = new Date();
     const fileName = `${this.logName} - ${
-      date.getMonth() + 1
-    }_${date.getDate()}_${date.getFullYear()}.log`;
+      date.getFullYear()
+    }_${date.getMonth() + 1}_${date.getDate()}.log`;
     
     //If directory does not exist create it.
     if (!fs.existsSync(path.join(this.path))) {
@@ -64,6 +64,14 @@ class LiteLogger {
     }
 
     logStream.end();
+  }
+
+  logError(message) {
+    this.log(message, "ERROR");
+  }
+
+  logWarning(message) {
+    this.log(message, "WARNING");
   }
 }
 
