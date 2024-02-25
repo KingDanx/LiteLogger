@@ -2,35 +2,44 @@ const fs = require("fs");
 const path = require("path");
 
 class LiteLogger {
-  constructor(directory, logName = "Log", folderName='logs') {
+  constructor(directory, logName = "Log", folderName = "logs") {
     this.directory = directory;
     this.folderName = folderName;
     this.logName = logName;
     this.path = `${directory}/${folderName}`;
+    this.check_directory();
+  }
+
+  check_directory() {
+    try {
+      //If directory does not exist create it.
+      if (!fs.existsSync(path.join(this.path))) {
+        fs.mkdir(path.join(this.path), (e) => {
+          if (e) {
+            console.error(e);
+          } else
+            console.info(
+              `Log directory ${this.folderName} successfully created!`
+            );
+        });
+      } else {
+      }
+    } catch (e) {
+      console.error(e);
+    }
   }
 
   log(message, messageType = "INFO") {
     const date = new Date();
-    const fileName = `${this.logName} - ${
-      date.getFullYear()
-    }_${date.getMonth() + 1}_${date.getDate()}.log`;
-    
-    //If directory does not exist create it.
-    if (!fs.existsSync(path.join(this.path))) {
-      fs.mkdir(path.join(this.path), (e) => {
-        if (e) console.error(e);
-        else
-        console.info(
-          `Log directory ${this.folderName} successfully created!`
-          );
-        });
-      }
-      
-      // If file does not exist, create it.
-      if (!fs.existsSync(path.join(this.path, fileName))) {
-        fs.writeFileSync(path.join(this.path, fileName), "");
-      }
-      
+    const fileName = `${this.logName} - ${date.getFullYear()}_${
+      date.getMonth() + 1
+    }_${date.getDate()}.log`;
+
+    // If file does not exist, create it.
+    if (!fs.existsSync(path.join(this.path, fileName))) {
+      fs.writeFileSync(path.join(this.path, fileName), "");
+    }
+
     //Creates file stream, flag: "a" is for append
     const logStream = fs.createWriteStream(path.join(this.path, fileName), {
       flags: "a",
