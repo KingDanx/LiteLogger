@@ -1,25 +1,69 @@
-const fs = require("fs");
-const path = require("path");
+import fs from "fs";
+import path from "path";
+import util from "util";
 
-class LiteLogger {
+/**
+ * A lightweight file-based logging utility that supports log rotation,
+ * historical preservation, and separate "latest" log tracking.
+ */
+export default class LiteLogger {
+  /**
+   * Creates an instance of LiteLogger.
+   * @param {string} directory - The root directory path where logs should be stored.
+   * @param {string} [logName="Log"] - The base prefix name for the log files.
+   * @param {string} [folderName="logs"] - The name of the folder created inside the root directory.
+   * @param {number} [preserveCount=0] - The max age of log files in days before deletion. Set to 0 to disable automated deletion.
+   */
   constructor(
     directory,
     logName = "Log",
     folderName = "logs",
-    preserveCount = 0 //? Logs will not be deleted
+    preserveCount = 0, //? Logs will not be deleted
   ) {
+    /**
+     * @type {string}
+     * @public
+     */
     this.directory = directory;
+
+    /**
+     * @type {string}
+     * @public
+     */
     this.folderName = folderName;
+
+    /**
+     * @type {string}
+     * @public
+     */
     this.logName = logName;
+
+    /**
+     * @type {string}
+     * @public
+     */
     this.path = `${directory}/${folderName}`;
+
+    /**
+     * @type {number}
+     * @public
+     */
     this.preserveCount = preserveCount;
+
+    /**
+     * @type {NodeJS.Timeout | undefined}
+     * @private
+     */
+    this.cleanInterval;
+
     this.cleanLogs();
   }
 
   /**
-   *
-   * @param {string} message
-   * @param {string} messageType
+   * Logs a message to both a daily log file and a running "latest" log file.
+   * @param {*} message - The payload or text message to log. Can be a string, number, array, or object.
+   * @param {string} [messageType="INFO"] - The classification category of the log entry (e.g., INFO, WARN, ERROR).
+   * @returns {void}
    */
   log(message, messageType = "INFO") {
     const date = new Date();
@@ -35,7 +79,7 @@ class LiteLogger {
         if (e) console.error(e);
         else
           console.info(
-            `Log directory ${this.folderName} successfully created!`
+            `Log directory ${this.folderName} successfully created!`,
           );
       });
     }
@@ -55,11 +99,13 @@ class LiteLogger {
   }
 
   /**
-   *
-   * @param {string} message
-   * @param {string} messageType
-   * @param {Date} date
-   * @param {string} file
+   * Writes data directly to the specified target log file stream using console.log style formatting.
+   * @param {*} message - The message data to be written. Objects and primitives are formatted exactly like a console log.
+   * @param {string} messageType - The log entry category level.
+   * @param {Date} date - The specific timestamp execution context.
+   * @param {string} file - The file name or path relative to the log directory.
+   * @returns {void}
+   * @private
    */
   write(message, messageType, date, file) {
     //? Creates file stream, flag: "a" is for append
@@ -67,34 +113,25 @@ class LiteLogger {
       flags: "a",
     });
 
-    if (typeof message != "string" && typeof message != "number") {
-      //? What is being written to the file ie: [WARNING] Date - Time - Message
-      logStream.write(
-        `[${messageType}] ${
-          date.getMonth() + 1
-        }-${date.getDate()}-${date.getFullYear()} - ${this.determineLeadingZero(
-          date.getHours()
-        )}:${this.determineLeadingZero(
-          date.getMinutes()
-        )}:${this.determineLeadingZero(date.getSeconds())} - ${JSON.stringify(
-          message
-        )}\n`
-      );
-    } else {
-      logStream.write(
-        `[${messageType}] ${
-          date.getMonth() + 1
-        }-${date.getDate()}-${date.getFullYear()} - ${this.determineLeadingZero(
-          date.getHours()
-        )}:${this.determineLeadingZero(
-          date.getMinutes()
-        )}:${this.determineLeadingZero(date.getSeconds())} - ${message}\n`
-      );
-    }
+    //? Formats the payload exactly like console.log outputs strings, multi-line objects, etc.
+    const formattedMessage = util.format(message);
 
+    const timestamp = `${date.getMonth() + 1}-${date.getDate()}-${date.getFullYear()} - ${this.determineLeadingZero(
+      date.getHours(),
+    )}:${this.determineLeadingZero(
+      date.getMinutes(),
+    )}:${this.determineLeadingZero(date.getSeconds())}`;
+
+    logStream.write(`[${messageType}] ${timestamp} - ${formattedMessage}\n`);
     logStream.end();
   }
 
+  /**
+   * Initiates an interval loop that cleans up the log files directory.
+   * Monitors file size overages for the active latest log file, and prunes expired logs.
+   * @returns {void}
+   * @private
+   */
   cleanLogs() {
     const clean = () => {
       fs.readdir(this.path, (err, files) => {
@@ -145,24 +182,24 @@ class LiteLogger {
 
     //? Run immediately, then every hour
     clean();
-    const intervalId = setInterval(clean, 60 * 60 * 1_000);
+    this.cleanInterval = setInterval(clean, 60 * 60 * 1_000);
 
     //? Clear interval on process exit
-    process.on("exit", () => clearInterval(intervalId));
+    process.on("exit", () => clearInterval(this.cleanInterval));
     process.on("SIGINT", () => {
-      clearInterval(intervalId);
+      clearInterval(this.cleanInterval);
       process.exit();
     });
     process.on("SIGTERM", () => {
-      clearInterval(intervalId);
+      clearInterval(this.cleanInterval);
       process.exit();
     });
   }
 
   /**
-   *
-   * @param {number} number
-   * @returns {string}
+   * Utility to standardize single digits with a leading zero for clock/date normalization.
+   * @param {number} number - The input integer value.
+   * @returns {string} The formatted string, guaranteed to be at least two digits.
    */
   determineLeadingZero(number) {
     if (number < 10) {
@@ -172,36 +209,47 @@ class LiteLogger {
   }
 
   /**
-   * @deprecated - use this.error() instead
-   * @param {string} message
+   * Logs a message under the "ERROR" classification category level.
+   * @deprecated Use the `error()` method instead.
+   * @param {*} message - The payload or text error data to log.
+   * @returns {void}
    */
   logError(message) {
     this.log(message, "ERROR");
   }
 
   /**
-   *
-   * @param {string} message
+   * Logs a message under the "ERROR" classification category level.
+   * @param {*} message - The payload or text error data to log.
+   * @returns {void}
    */
   error(message) {
     this.log(message, "ERROR");
   }
 
   /**
-   * @deprecated - use this.warning() instead
-   * @param {string} message
+   * Logs a message under the "WARNING" classification category level.
+   * @deprecated Use the `warning()` method instead.
+   * @param {*} message - The payload or text warning data to log.
+   * @returns {void}
    */
   logWarning(message) {
     this.log(message, "WARNING");
   }
 
   /**
-   *
-   * @param {string} message
+   * Logs a message under the "WARNING" classification category level.
+   * @param {*} message - The payload or text warning data to log.
+   * @returns {void}
    */
   warning(message) {
     this.log(message, "WARNING");
   }
-}
 
-module.exports = LiteLogger;
+  /**
+   * Ends the log cleaning interval so the logger does not hold the process
+   */
+  end() {
+    clearInterval(this.cleanInterval);
+  }
+}

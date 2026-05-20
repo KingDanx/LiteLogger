@@ -1,20 +1,39 @@
 {
   "name": "@kingdanx/litelogger",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "For use in Nodejs applications to create log files for your application.",
   "main": "LiteLogger.js",
+  "types": "LiteLogger.d.ts",
+  "type": "module",
+  "files": [
+    "LiteLogger.js",
+    "LiteLogger.d.ts",
+    "README.md"
+  ],
   "scripts": {
-    "test": "node test.index.js"
+    "build": "tsc",
+    "test": "node test.index.js",
+    "prepublishOnly": "npm run build"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/KingDanx/LiteLogger.git"
   },
-  "keywords": [],
+  "keywords": [
+    "logger",
+    "logging",
+    "nodejs",
+    "file-logger",
+    "daily-logs"
+  ],
   "author": "",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/KingDanx/LiteLogger/issues"
   },
-  "homepage": "https://github.com/KingDanx/LiteLogger#readme"
+  "homepage": "https://github.com/KingDanx/LiteLogger#readme",
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.9.3"
+  }
 }
