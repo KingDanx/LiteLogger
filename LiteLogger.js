@@ -6,7 +6,7 @@ import util from "util";
  * A lightweight file-based logging utility that supports log rotation,
  * historical preservation, and separate "latest" log tracking.
  */
-export default class LiteLogger {
+class LiteLogger {
   /**
    * Creates an instance of LiteLogger.
    * @param {string} directory - The root directory path where logs should be stored.
@@ -253,3 +253,6 @@ export default class LiteLogger {
     clearInterval(this.cleanInterval);
   }
 }
+
+export default LiteLogger;
+module.exports = LiteLogger;
