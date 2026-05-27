@@ -255,4 +255,3 @@ class LiteLogger {
 }
 
 export default LiteLogger;
-module.exports = LiteLogger;

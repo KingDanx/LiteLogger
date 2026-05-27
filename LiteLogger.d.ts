@@ -1,8 +1,9 @@
+export default LiteLogger;
 /**
  * A lightweight file-based logging utility that supports log rotation,
  * historical preservation, and separate "latest" log tracking.
  */
-export default class LiteLogger {
+declare class LiteLogger {
     /**
      * Creates an instance of LiteLogger.
      * @param {string} directory - The root directory path where logs should be stored.

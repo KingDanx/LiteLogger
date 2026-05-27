@@ -1,1 +1,1 @@
-module.exports = require("./dist/cjs/LiteLogger.cjs").default;
+module.exports = require("./LiteLogger.cjs").default;
