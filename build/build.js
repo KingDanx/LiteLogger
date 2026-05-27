@@ -75,7 +75,7 @@ try {
     minify: true,
     target: "node",
     format: "esm",
-    naming: "[name].js",
+    naming: "index.js",
   });
 
   await Bun.build({
@@ -84,7 +84,7 @@ try {
     minify: true,
     target: "node",
     format: "cjs",
-    naming: "[name].js",
+    naming: "index.js",
   });
 
   const { values } = parseArgs({

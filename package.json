@@ -1,6 +1,6 @@
 {
   "name": "@kingdanx/litelogger",
-  "version": "2.0.2",
+  "version": "2.0.3",
   "description": "For use in Nodejs applications to create log files for your application.",
   "main": "dist/cjs/LiteLogger.js",
   "module": "dist/esm/LiteLogger.js",
