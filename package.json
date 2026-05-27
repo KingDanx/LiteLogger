@@ -1,8 +1,15 @@
 {
   "name": "@kingdanx/litelogger",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "For use in Nodejs applications to create log files for your application.",
-  "main": "LiteLogger.js",
+  "main": "dist/cjs/LiteLogger.js",
+  "module": "dist/esm/LiteLogger.js",
+  "exports": {
+    ".": {
+      "require": "./dist/cjs/index.js",
+      "import": "./dist/esm/index.js"
+    }
+  },
   "types": "LiteLogger.d.ts",
   "type": "module",
   "files": [
@@ -35,5 +42,6 @@
   "devDependencies": {
     "@types/node": "^20.0.0",
     "typescript": "^5.9.3"
-  }
+  },
+  "date": "2026.05.27"
 }
