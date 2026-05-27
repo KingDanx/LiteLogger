@@ -84,7 +84,7 @@ try {
     minify: true,
     target: "node",
     format: "cjs",
-    naming: "index.js",
+    naming: "index.cjs",
   });
 
   const { values } = parseArgs({
