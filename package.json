@@ -1,16 +1,17 @@
 {
   "name": "@kingdanx/litelogger",
-  "version": "2.0.6",
+  "version": "2.0.7",
   "description": "For use in Nodejs applications to create log files for your application.",
   "main": "dist/cjs/index.cjs",
   "module": "dist/esm/index.js",
   "exports": {
     ".": {
+      "types": "./LiteLogger.d.ts",
       "require": "./dist/cjs/index.cjs",
       "import": "./dist/esm/index.js"
     }
   },
-  "types": "LiteLogger.d.ts",
+  "types": "./LiteLogger.d.ts",
   "type": "module",
   "files": [
     "LiteLogger.js",
@@ -19,7 +20,7 @@
     "README.md"
   ],
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && bun ./build/build.js",
     "test": "node test.index.js",
     "prepublishOnly": "npm run build"
   },
@@ -44,5 +45,5 @@
     "@types/node": "^20.0.0",
     "typescript": "^5.9.3"
   },
-  "date": "2026.05.27"
+  "date": "2026.05.28"
 }
